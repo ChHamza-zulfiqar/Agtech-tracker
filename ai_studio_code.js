@@ -1,120 +1,139 @@
-// Initial Data Structure
-const defaultData = {
-    skills: [
-        { name: 'Excel for Ag', progress: 80, category: 'Data' },
-        { name: 'SQL/BigQuery', progress: 40, category: 'Data' },
-        { name: 'Python (NumPy/Pandas)', progress: 20, category: 'AI' },
-        { name: 'Power BI', progress: 50, category: 'Data' },
-        { name: 'German (A1-B1)', progress: 10, category: 'Language' },
-        { name: 'GIS/Remote Sensing', progress: 5, category: 'AgTech' }
-    ],
-    unis: [
-        { name: 'TU Munich', status: 'Researching', country: 'Germany' },
-        { name: 'Wageningen', status: 'Target', country: 'Netherlands' },
-        { name: 'Bologna', status: 'Target', country: 'Italy' },
-        { name: 'Hohenheim', status: 'Top Priority', country: 'Germany' }
-    ],
-    scholarships: [
-        { name: 'DAAD EPOS', status: 'Pending' },
-        { name: 'Erasmus Mundus', status: 'Not Started' }
-    ],
-    vocab: [],
-    ideas: [],
-    sop: "",
-    streak: 5
-};
+const agTechRoadmap = [
+  {
+    phase: "Phase 1: Data Analytics Foundation (Next 2–3 Months)",
+    topics: [
+      {
+        name: "Excel Masterclass",
+        instructor: "Leila Gharani",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "Excel for Beginners Course", url: "https://youtube.com" },
+          { title: "Pivot Tables & Data Analysis Techniques", url: "https://youtube.com" }
+        ]
+      },
+      {
+        name: "SQL Database Core",
+        instructor: "Alex The Analyst",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "SQL Full Playlist Tutorial", url: "https://youtube.com" },
+          { title: "Practice Platform: SQLBolt Sandbox", url: "https://sqlbolt.com" },
+          { title: "Advanced Theory: Mode SQL Tutorial", url: "https://mode.com" }
+        ]
+      }
+    ]
+  },
+  {
+    phase: "Phase 2: Power BI (Months 2–4)",
+    topics: [
+      {
+        name: "Power BI Engine Architecture",
+        instructor: "Pragmatic Works & Guy in a Cube",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "Pragmatic Works Dashboard Training", url: "https://youtube.com" },
+          { title: "Guy in a Cube Technical Strategy", url: "https://youtube.com" }
+        ],
+        milestones: ["Crop Yield Dashboard Setup", "Rainfall Analytics", "Agriculture Market Dashboard"]
+      }
+    ]
+  },
+  {
+    phase: "Phase 3: AI Fundamentals (Months 3–5)",
+    topics: [
+      {
+        name: "AI-900 Certification Track",
+        instructor: "Microsoft Learn & DeepLearning.AI",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "Official Microsoft AI-900 Pathway Portal", url: "https://microsoft.com" },
+          { title: "Andrew Ng DeepLearning.AI Semantics", url: "https://youtube.com" }
+        ]
+      }
+    ]
+  },
+  {
+    phase: "Phase 4: Python Programming (Months 4–6)",
+    topics: [
+      {
+        name: "Python Core Scripts",
+        instructor: "freeCodeCamp & Corey Schafer",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "Corey Schafer Object-Oriented Framework", url: "https://youtube.com" },
+          { title: "freeCodeCamp Data Structures Guide", url: "https://youtube.com" }
+        ]
+      }
+    ]
+  },
+  {
+    phase: "Phase 5: Digital Agriculture & AgTech Systems",
+    topics: [
+      {
+        name: "Global Agricultural Operations",
+        instructor: "CGIAR & FAO Systems",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "CGIAR Climate Resilience Solutions", url: "https://youtube.com" },
+          { title: "FAO International Trade & Food Systems", url: "https://youtube.com" },
+          { title: "IRRI Smart Farming Research Projects", url: "https://youtube.com" },
+          { title: "CIMMYT Sustainability Standards", url: "https://youtube.com" }
+        ]
+      }
+    ]
+  },
+  {
+    phase: "Phase 6: Remote Sensing & GIS Integration",
+    topics: [
+      {
+        name: "QGIS Satellite Mapping Engine",
+        instructor: "GeoDelta Labs & Open Source Options",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "GeoDelta Labs Remote Sensing Tracks", url: "https://youtube.com" },
+          { title: "NDVI Indexing & Crop Monitoring Tutorials", url: "https://youtube.com" }
+        ]
+      }
+    ]
+  },
+  {
+    phase: "Phase 7: AI in Agriculture (The Golden Intersection)",
+    topics: [
+      {
+        name: "Precision Farming Frontiers",
+        instructor: "Wageningen University & Research",
+        channelUrl: "https://youtube.com",
+        resources: [
+          { title: "WUR Smart Farming Systems Seminars", url: "https://youtube.com" },
+          { title: "Digital Agriculture Global Frameworks", url: "https://youtube.com" }
+        ]
+      }
+    ]
+  }
+];
 
-let appData = JSON.parse(localStorage.getItem('agtechData')) || defaultData;
-
-function saveData() {
-    localStorage.setItem('agtechData', JSON.stringify(appData));
-    renderAll();
-}
-
-// Navigation Logic
-function showView(viewId) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById(viewId).classList.add('active');
-    event.currentTarget.classList.add('active');
-}
-
-// Render Functions
-function renderAll() {
-    renderDashboard();
-    renderSkills();
-    renderUnis();
-    renderVocab();
-}
-
-function renderDashboard() {
-    const avg = Math.round(appData.skills.reduce((a, b) => a + b.progress, 0) / appData.skills.length);
-    document.getElementById('overall-progress').innerText = avg + "%";
-    document.getElementById('streak-val').innerText = appData.streak + " Days";
-}
-
-function renderSkills() {
-    const list = document.getElementById('skills-list');
-    list.innerHTML = appData.skills.map((s, i) => `
-        <div class="item-card">
-            <div>
-                <strong>${s.name}</strong>
-                <input type="range" value="${s.progress}" onchange="updateSkill(${i}, this.value)">
-            </div>
-            <span>${s.progress}%</span>
+function loadResourceLibrary() {
+  const container = document.getElementById('resource-library-container');
+  if(!container) return;
+  
+  container.innerHTML = agTechRoadmap.map(phase => `
+    <div class="phase-card">
+      <h2>${phase.phase}</h2>
+      ${phase.topics.map(topic => `
+        <div class="topic-block">
+          <h3>${topic.name} <small>by <a href="${topic.channelUrl}" target="_blank">Channel Link</a></small></h3>
+          <ul>
+            ${topic.resources.map(res => `
+              <li><a href="${res.url}" target="_blank" rel="noopener">${res.title}</a></li>
+            `).join('')}
+          </ul>
+          ${topic.milestones ? `<h4>Milestones To Complete:</h4><ul>${topic.milestones.map(m => `<li>🎯 ${m}</li>`).join('')}</ul>` : ''}
         </div>
-    `).join('');
+      `).join('')}
+    </div>
+  `).join('');
 }
 
-function updateSkill(index, val) {
-    appData.skills[index].progress = parseInt(val);
-    saveData();
-}
-
-function renderUnis() {
-    const list = document.getElementById('uni-list');
-    list.innerHTML = appData.unis.map(u => `
-        <div class="item-card">
-            <span>${u.name} (${u.country})</span>
-            <small>${u.status}</small>
-        </div>
-    `).join('');
-}
-
-function addVocab() {
-    const de = document.getElementById('vocab-de').value;
-    const en = document.getElementById('vocab-en').value;
-    if(de && en) {
-        appData.vocab.push({ de, en });
-        document.getElementById('vocab-de').value = '';
-        document.getElementById('vocab-en').value = '';
-        saveData();
-    }
-}
-
-function renderVocab() {
-    const list = document.getElementById('vocab-list');
-    list.innerHTML = appData.vocab.slice(-5).map(v => `
-        <div style="font-size:0.9rem; padding:5px; border-bottom:1px solid #333">
-            <b>${v.de}</b>: ${v.en}
-        </div>
-    `).join('');
-}
-
-function saveSOP() {
-    appData.sop = document.getElementById('sop-content').value;
-    saveData();
-    alert("SOP Draft Saved Locally!");
-}
-
-// Dark Mode Toggle
-document.getElementById('theme-toggle').addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const icon = document.querySelector('#theme-toggle i');
-    icon.classList.toggle('fa-moon');
-    icon.classList.toggle('fa-sun');
+document.addEventListener("DOMContentLoaded", () => {
+  loadResourceLibrary();
 });
-
-// Initialize
-renderAll();
-document.getElementById('sop-content').value = appData.sop;
