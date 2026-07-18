@@ -1,0 +1,15 @@
+{
+  "name": "AgTech AI Journey",
+  "short_name": "AgTechAI",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#2e7d32",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2099/2099143.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

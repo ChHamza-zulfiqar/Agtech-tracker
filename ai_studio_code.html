@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgTech AI Journey</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2e7d32">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dark-mode">
+    <nav class="top-nav">
+        <h1><i class="fas fa-seedling"></i> AgTech AI</h1>
+        <button id="theme-toggle"><i class="fas fa-moon"></i></button>
+    </nav>
+
+    <main id="app-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="view active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Overall Progress</h3>
+                    <div class="progress-circle" id="overall-progress">0%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Streak</h3>
+                    <div class="stat-val" id="streak-val">0 Days</div>
+                </div>
+            </div>
+            
+            <div class="section-title">Focus Skills</div>
+            <div id="learning-summary" class="list-container"></div>
+        </section>
+
+        <!-- Tracker Section -->
+        <section id="tracker" class="view">
+            <h2>Learning Roadmap</h2>
+            <div id="skills-list"></div>
+        </section>
+
+        <!-- University & Scholarships -->
+        <section id="applications" class="view">
+            <h2>University Shortlist</h2>
+            <div id="uni-list" class="list-container"></div>
+            <h2 style="margin-top:20px">Scholarships</h2>
+            <div id="scholarship-list" class="list-container"></div>
+        </section>
+
+        <!-- Tools (Vocab, SOP, Ideas) -->
+        <section id="tools" class="view">
+            <div class="tool-card">
+                <h3><i class="fas fa-language"></i> German Vocab</h3>
+                <div class="input-group">
+                    <input type="text" id="vocab-de" placeholder="Deutsch">
+                    <input type="text" id="vocab-en" placeholder="English">
+                    <button onclick="addVocab()">Add</button>
+                </div>
+                <div id="vocab-list" class="mini-list"></div>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fas fa-lightbulb"></i> Startup Idea Vault</h3>
+                <textarea id="idea-text" placeholder="Future AgTech concept..."></textarea>
+                <button onclick="saveIdea()">Save Idea</button>
+                <div id="idea-list" class="mini-list"></div>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fas fa-file-alt"></i> SOP Builder</h3>
+                <textarea id="sop-content" placeholder="Draft your Statement of Purpose..."></textarea>
+                <button onclick="saveSOP()">Save Draft</button>
+            </div>
+        </section>
+    </main>
+
+    <nav class="bottom-nav">
+        <button onclick="showView('dashboard')" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></button>
+        <button onclick="showView('tracker')" class="nav-item"><i class="fas fa-book"></i><span>Learn</span></button>
+        <button onclick="showView('applications')" class="nav-item"><i class="fas fa-university"></i><span>Apps</span></button>
+        <button onclick="showView('tools')" class="nav-item"><i class="fas fa-tools"></i><span>Tools</span></button>
+    </nav>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
