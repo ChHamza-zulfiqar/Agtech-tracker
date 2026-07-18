@@ -3,89 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgTech AI Journey</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2e7d32">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="dark-mode">
-    <nav class="top-nav">
-        <h1><i class="fas fa-seedling"></i> AgTech AI</h1>
-        <button id="theme-toggle"><i class="fas fa-moon"></i></button>
-    </nav>
-
-    <main id="app-content">
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="view active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Overall Progress</h3>
-                    <div class="progress-circle" id="overall-progress">0%</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Streak</h3>
-                    <div class="stat-val" id="streak-val">0 Days</div>
-                </div>
-            </div>
-            
-            <div class="section-title">Focus Skills</div>
-            <div id="learning-summary" class="list-container"></div>
-        </section>
-
-        <!-- Tracker Section -->
-        <section id="tracker" class="view">
-            <h2>Learning Roadmap</h2>
-            <div id="skills-list"></div>
-        </section>
-
-        <!-- University & Scholarships -->
-        <section id="applications" class="view">
-            <h2>University Shortlist</h2>
-            <div id="uni-list" class="list-container"></div>
-            <h2 style="margin-top:20px">Scholarships</h2>
-            <div id="scholarship-list" class="list-container"></div>
-        </section>
-
-        <!-- Tools (Vocab, SOP, Ideas) -->
-        <section id="tools" class="view">
-            <div class="tool-card">
-                <h3><i class="fas fa-language"></i> German Vocab</h3>
-                <div class="input-group">
-                    <input type="text" id="vocab-de" placeholder="Deutsch">
-                    <input type="text" id="vocab-en" placeholder="English">
-                    <button onclick="addVocab()">Add</button>
-                </div>
-                <div id="vocab-list" class="mini-list"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3><i class="fas fa-lightbulb"></i> Startup Idea Vault</h3>
-                <textarea id="idea-text" placeholder="Future AgTech concept..."></textarea>
-                <button onclick="saveIdea()">Save Idea</button>
-                <div id="idea-list" class="mini-list"></div>
-            </div>
-
-            <div class="tool-card">
-                <h3><i class="fas fa-file-alt"></i> SOP Builder</h3>
-                <textarea id="sop-content" placeholder="Draft your Statement of Purpose..."></textarea>
-                <button onclick="saveSOP()">Save Draft</button>
-            </div>
-        </section>
-    </main>
-
-    <nav class="bottom-nav">
-        <button onclick="showView('dashboard')" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></button>
-        <button onclick="showView('tracker')" class="nav-item"><i class="fas fa-book"></i><span>Learn</span></button>
-        <button onclick="showView('applications')" class="nav-item"><i class="fas fa-university"></i><span>Apps</span></button>
-        <button onclick="showView('tools')" class="nav-item"><i class="fas fa-tools"></i><span>Tools</span></button>
-    </nav>
-
-    <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+    <title>AgTech AI Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d6a4f;
+            --primary-light: #52b788;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #1b4332;
+            --text-light: #6c757d;
+            --border: #e9ecef;
         }
-    </script>
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid var(--border);
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #eee;
+            border-radius: 10px;
+            height: 8px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            background: var(--primary-light);
+            height: 100%;
+            border-radius: 10px;
+            width: 5%; /* Example */
+        }
+
+        /* Form Elements */
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        /* Bottom Navigation */
+        nav.bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+
+        /* Icons (using emojis for simplicity, could use FontAwesome) */
+        .icon-btn { font-size: 1.2rem; background: none; border: none; cursor: pointer; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">🌱 AgTech AI</div>
+    <button class="icon-btn">🌙</button>
+</header>
+
+<div class="container">
+    
+    <!-- Stats Row -->
+    <div class="flex-row">
+        <div class="card" style="flex: 1;">
+            <h2>📈 Progress</h2>
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <small>0% completed</small>
+        </div>
+        <div class="card" style="flex: 1;">
+            <h2>🔥 Streak</h2>
+            <div style="font-size: 1.5rem; font-weight: bold;">0 Days</div>
+            <small>Focus Skills</small>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="card">
+        <h2>🗺️ Roadmap & University</h2>
+        <div class="flex-row">
+            <button class="btn-outline" style="flex: 1;">Roadmap</button>
+            <button class="btn-outline" style="flex: 1;">Shortlist</button>
+        </div>
+    </div>
+
+    <!-- German Vocab -->
+    <div class="card">
+        <h2>🇩🇪 German Vocab</h2>
+        <div class="flex-row">
+            <input type="text" placeholder="Deutsch">
+            <input type="text" placeholder="English">
+        </div>
+        <button style="width: 100%;">Add Word</button>
+    </div>
+
+    <!-- Startup Vault -->
+    <div class="card">
+        <h2>💡 Startup Idea Vault</h2>
+        <textarea rows="3" placeholder="Future AgTech concept..."></textarea>
+        <button style="width: 100%;">Save Idea</button>
+    </div>
+
+    <!-- SOP Builder -->
+    <div class="card">
+        <h2>📄 SOP Builder</h2>
+        <textarea rows="4" placeholder="Draft your Statement of Purpose..."></textarea>
+        <button style="width: 100%;">Save Draft</button>
+    </div>
+
+</div>
+
+<!-- Fixed Navigation -->
+<nav class="bottom-nav">
+    <a href="#" class="nav-item active">🏠<br>Home</a>
+    <a href="#" class="nav-item">📚<br>Learn</a>
+    <a href="#" class="nav-item">🏛️<br>Apps</a>
+    <a href="#" class="nav-item">🛠️<br>Tools</a>
+</nav>
+
 </body>
 </html>
